@@ -19,6 +19,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 import java.util.ArrayList;
 
 /**
@@ -58,7 +60,7 @@ public class CustomAdapterForExercises extends ArrayAdapter<Exercise>{
 
             TextView tvPauza =(TextView) view.findViewById(R.id.tvPauza);
 
-            ImageView imageView = (ImageView) view.findViewById(R.id.imageView3);
+            final ImageView imageView = (ImageView) view.findViewById(R.id.imageView3);
 
             //toDo setat imaginea
 
@@ -80,25 +82,36 @@ public class CustomAdapterForExercises extends ArrayAdapter<Exercise>{
 
 
             imageView.setOnTouchListener(new View.OnTouchListener() {
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(finalView.getContext()); //sau Groups.class
+                AlertDialog alert = builder.create();
+
+
                 @Override
                 public boolean onTouch(View view, MotionEvent motionEvent) {
+
                     int actionMaskerd = motionEvent.getActionMasked();
-                    final AlertDialog.Builder builder = new AlertDialog.Builder(finalView.getContext()); //sau Groups.class
-                    AlertDialog alert = builder.create();
+                    Log.e("APASARI", "Apas");
 
                     switch (actionMaskerd){
-                        case MotionEvent.ACTION_BUTTON_PRESS:
-
-                            LayoutInflater layoutInflater = LayoutInflater.from(finalView.getContext());
-                            final View view2 = layoutInflater.inflate(R.layout.gif_view,null);
-                            builder.setView(view2);
-                            builder.show();
-                            System.out.println("APAS");
-                            Log.e("APASARI","Apas");
+                        case MotionEvent.ACTION_DOWN:
+                            if(!alert.isShowing()) {
+                                LayoutInflater layoutInflater = LayoutInflater.from(finalView.getContext());
+                                final View view2 = layoutInflater.inflate(R.layout.gif_view,null);
+                                alert.setView(view2);
+//                                alert.getWindow().setBackgroundDrawable(Color.rgb(0,0,0));
+//                                alert.getWindow().setLayout(100,100);
+                                ImageView imageView1 = (ImageView) view2.findViewById(R.id.imageView2);
+                                Glide.with(view2.getContext()).load("https://upload.wikimedia.org/wikipedia/commons/2/2c/Rotating_earth_%28large%29.gif").into(imageView1);
+                                alert.show();
+                            }
+//                            System.out.println("APAS");
+//                            Log.e("APASARI","Apas");
                             break;
-                        case MotionEvent.ACTION_BUTTON_RELEASE:
+                        case MotionEvent.ACTION_UP:
+//                            alert.hide();
                             alert.dismiss();
-                            alert.cancel();
+//                            alert.cancel();
                             System.out.println("nu mai apas");
                             Log.e("APASARI","Nu mai apas");
                             break;
