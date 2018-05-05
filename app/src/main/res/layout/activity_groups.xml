@@ -34,13 +34,18 @@
                         android:id="@+id/textView4"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="nrExercises" />
+                        android:text="nrExercises"
+                        android:textSize="18dp"
+                        android:textStyle="bold"/>
 
                     <TextView
                         android:id="@+id/textView3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="workouts" />
+                        android:text="Workouts"
+                        android:textSize="20dp"
+                        android:textStyle="bold|italic"
+                        />
                 </LinearLayout>
 
                 <LinearLayout
@@ -64,7 +69,9 @@
                         android:id="@+id/textView5"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="level" />
+                        android:text="Level"
+                        android:textSize="18dp"
+                        android:textStyle="bold|italic"/>
                 </LinearLayout>
 
             </LinearLayout>

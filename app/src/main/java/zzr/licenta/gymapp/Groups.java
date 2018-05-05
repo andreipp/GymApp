@@ -9,10 +9,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.RatingBar;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
 public class Groups extends AppCompatActivity {
+
+    RatingBar rbEnergy;
+    TextView tvNrExercises;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,7 +25,8 @@ public class Groups extends AppCompatActivity {
         setContentView(R.layout.activity_groups);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
+        rbEnergy = (RatingBar) findViewById(R.id.ratingBar);
+        tvNrExercises = (TextView) findViewById(R.id.textView4);
         ListView listView = (ListView) findViewById(R.id.listView);
         String data = null;
         Bundle extras = getIntent().getExtras();
@@ -29,6 +35,15 @@ public class Groups extends AppCompatActivity {
         }
         ArrayList<Exercise> ex= new ArrayList<Exercise>();
         if(data!=null){
+
+            if(data.contains("Beginner")){
+                rbEnergy.setRating(1);
+            }else if(data.contains("Intermediate")){
+                rbEnergy.setRating(2);
+            }else if(data.contains("Advanced")){
+                rbEnergy.setRating(3);
+            }
+
             switch (data){
                 case "Piept_Beginner": {
                     ex = Constants.initializeazaExercitiiPieptBeginner();
@@ -92,6 +107,7 @@ public class Groups extends AppCompatActivity {
                 }
             }
         }
+        tvNrExercises.setText(ex.size()+"");
         listView.setAdapter(new CustomAdapterForExercises(this,R.layout.customadapter_exercises,ex));
         
     }
