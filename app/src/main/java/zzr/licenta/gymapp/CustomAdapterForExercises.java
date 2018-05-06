@@ -50,7 +50,7 @@ public class CustomAdapterForExercises extends ArrayAdapter<Exercise>{
             view = inflater.inflate(R.layout.customadapter_exercises,null);
         }
 
-        Exercise exercise = getItem(position);
+        final Exercise exercise = getItem(position);
 
         if(exercise!=null){
 
@@ -60,60 +60,52 @@ public class CustomAdapterForExercises extends ArrayAdapter<Exercise>{
 
             TextView tvPauza =(TextView) view.findViewById(R.id.tvPauza);
 
-            final ImageView imageView = (ImageView) view.findViewById(R.id.imageView3);
-
-            //toDo setat imaginea
+            final ImageView ivMiniExercise = (ImageView) view.findViewById(R.id.ivMiniExercise);
 
             tvDenumire.setText(exercise.getNume());
             tvSeriiRepetari.setText(exercise.getFormatSeriiRepetii());
-            tvPauza.setText(Integer.toString(exercise.getPauza()));
+            tvPauza.setText("Pause " + Integer.toString(exercise.getPauza()) + " seconds");
+            Glide.with(view.getContext()).load(exercise.adresaImagine).dontAnimate().into(ivMiniExercise);
+
             final View finalView = view;
-            imageView.setOnLongClickListener(new View.OnLongClickListener() {
+
+            ivMiniExercise.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
-                public boolean onLongClick(View view1) {
-                    final AlertDialog.Builder builder = new AlertDialog.Builder(finalView.getContext()); //sau Groups.class
+                public boolean onLongClick(View view) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(finalView.getContext());
+                    AlertDialog alert = builder.create();
                     LayoutInflater layoutInflater = LayoutInflater.from(finalView.getContext());
-                    final View view2 = layoutInflater.inflate(R.layout.gif_view,null);
-                    builder.setView(view2);
-                    builder.show();
+                    View view2 = layoutInflater.inflate(R.layout.gif_view,null);
+                    alert.setView(view2);
                     return false;
                 }
             });
 
-
-            imageView.setOnTouchListener(new View.OnTouchListener() {
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(finalView.getContext()); //sau Groups.class
+            ivMiniExercise.setOnTouchListener(new View.OnTouchListener() {
+                AlertDialog.Builder builder = new AlertDialog.Builder(finalView.getContext());
                 AlertDialog alert = builder.create();
-
 
                 @Override
                 public boolean onTouch(View view, MotionEvent motionEvent) {
 
                     int actionMaskerd = motionEvent.getActionMasked();
-                    Log.e("APASARI", "Apas");
-
                     switch (actionMaskerd){
                         case MotionEvent.ACTION_DOWN:
                             if(!alert.isShowing()) {
+                                Log.e("Apas","3");
                                 LayoutInflater layoutInflater = LayoutInflater.from(finalView.getContext());
-                                final View view2 = layoutInflater.inflate(R.layout.gif_view,null);
+                                View view2 = layoutInflater.inflate(R.layout.gif_view,null);
                                 alert.setView(view2);
-//                                alert.getWindow().setBackgroundDrawable(Color.rgb(0,0,0));
-//                                alert.getWindow().setLayout(100,100);
-                                ImageView imageView1 = (ImageView) view2.findViewById(R.id.imageView2);
-                                Glide.with(view2.getContext()).load("https://upload.wikimedia.org/wikipedia/commons/2/2c/Rotating_earth_%28large%29.gif").into(imageView1);
+                                ImageView ivMaxiExercise = (ImageView) view2.findViewById(R.id.ivMaxiExercise);
+                                Glide.with(view2.getContext()).load(exercise.adresaImagine).into(ivMaxiExercise);
                                 alert.show();
+                                Log.e("Apas","4");
                             }
-//                            System.out.println("APAS");
-//                            Log.e("APASARI","Apas");
                             break;
                         case MotionEvent.ACTION_UP:
-//                            alert.hide();
+                            Log.e("Nu Apas","1");
                             alert.dismiss();
-//                            alert.cancel();
-                            System.out.println("nu mai apas");
-                            Log.e("APASARI","Nu mai apas");
+                            Log.e("Nu Apas","2");
                             break;
                     }
                     return false;

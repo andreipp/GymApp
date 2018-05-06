@@ -22,12 +22,21 @@
                 android:id="@+id/tvDenumire"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="TextView" />
+                android:textStyle="bold"
+                android:textSize="16dp"
+                android:text="Exercise" />
 
             <TextView
                 android:id="@+id/tvSeriiRepetari"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="TextView" />
+
+            <TextView
+                android:id="@+id/tvPauza"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:text="TextView" />
         </LinearLayout>
 
@@ -40,16 +49,10 @@
             android:orientation="vertical" >
 
             <ImageView
-                android:id="@+id/imageView3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:id="@+id/ivMiniExercise"
+                android:layout_width="74dp"
+                android:layout_height="58dp"
                 app:srcCompat="@drawable/ic_menu_play" />
-
-            <TextView
-                android:id="@+id/tvPauza"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="TextView" />
 
         </LinearLayout>
 

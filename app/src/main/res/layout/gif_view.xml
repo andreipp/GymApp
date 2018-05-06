@@ -5,7 +5,7 @@
     android:layout_height="match_parent">
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/ivMaxiExercise"
         android:layout_width="300dp"
         android:layout_height="300dp"
         app:srcCompat="@drawable/ic_menu_play" />
