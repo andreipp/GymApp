@@ -1,18 +1,22 @@
-package zzr.licenta.gymapp;
+package zzr.licenta.gymapp.Fragments;
 
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
 import java.util.ArrayList;
-import java.util.List;
+
+import zzr.licenta.gymapp.ActivityClasses.MainActivity;
+import zzr.licenta.gymapp.Configs.Constants;
+import zzr.licenta.gymapp.CustomAdapters.CustomAdapterForPlans;
+import zzr.licenta.gymapp.Model.Exercise;
+import zzr.licenta.gymapp.Model.NoName;
+import zzr.licenta.gymapp.R;
 
 
 /**
@@ -24,6 +28,11 @@ public class Plans extends Fragment {
     public Plans() {
         // Required empty public constructor
         arrayList = Constants.initializeazaNoName();
+        Exercise ex = new Exercise("gg",1,1,1,"");
+        ArrayList<Exercise> list = new ArrayList<>();
+        list.add(ex);
+        MainActivity.database.noNameDAO().addGroup(new NoName(1,"piept","p",list,true));
+        Log.i("Database","User adaugat");
     }
 
 

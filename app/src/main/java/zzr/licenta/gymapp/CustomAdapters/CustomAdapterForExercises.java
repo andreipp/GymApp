@@ -1,11 +1,7 @@
-package zzr.licenta.gymapp;
+package zzr.licenta.gymapp.CustomAdapters;
 
 import android.app.AlertDialog;
-import android.app.admin.SystemUpdateInfo;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.graphics.Color;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -15,13 +11,16 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import zzr.licenta.gymapp.Model.Exercise;
+import zzr.licenta.gymapp.R;
 
 /**
  * Created by Andrei on 04/11/2018.
@@ -29,10 +28,10 @@ import java.util.ArrayList;
 
 public class CustomAdapterForExercises extends ArrayAdapter<Exercise>{
 
-    private ArrayList<Exercise> exerciseArrayList = new ArrayList<Exercise>();
+    private List<Exercise> exerciseArrayList = new ArrayList<Exercise>();
     Context mContext;
 
-    public CustomAdapterForExercises(Context context, @LayoutRes int resource, ArrayList<Exercise> data){
+    public CustomAdapterForExercises(Context context, @LayoutRes int resource, List<Exercise> data){
         super(context,resource,data);
         exerciseArrayList.clear();
         this.exerciseArrayList = data;
@@ -65,7 +64,7 @@ public class CustomAdapterForExercises extends ArrayAdapter<Exercise>{
             tvDenumire.setText(exercise.getNume());
             tvSeriiRepetari.setText(exercise.getFormatSeriiRepetii());
             tvPauza.setText("Pause " + Integer.toString(exercise.getPauza()) + " seconds");
-            Glide.with(view.getContext()).load(exercise.adresaImagine).dontAnimate().into(ivMiniExercise);
+            Glide.with(view.getContext()).load(exercise.getAdresaImagine()).into(ivMiniExercise);
 
             final View finalView = view;
 
@@ -97,7 +96,7 @@ public class CustomAdapterForExercises extends ArrayAdapter<Exercise>{
                                 View view2 = layoutInflater.inflate(R.layout.gif_view,null);
                                 alert.setView(view2);
                                 ImageView ivMaxiExercise = (ImageView) view2.findViewById(R.id.ivMaxiExercise);
-                                Glide.with(view2.getContext()).load(exercise.adresaImagine).into(ivMaxiExercise);
+                                Glide.with(view2.getContext()).load(exercise.getAdresaImagine()).into(ivMaxiExercise);
                                 alert.show();
                                 Log.e("Apas","4");
                             }

@@ -1,7 +1,10 @@
-package zzr.licenta.gymapp;
+package zzr.licenta.gymapp.Configs;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+
+import zzr.licenta.gymapp.Model.Exercise;
+import zzr.licenta.gymapp.Model.NoName;
 
 /**
  * Created by Andrei on 03/26/2018.
@@ -12,7 +15,8 @@ public class Constants {
     public static String GRUPA = "Grupa";
     public static String INTENSITATE = "Intensitate";
     public static String GRUPA_INTENSITATE = GRUPA+"_"+INTENSITATE;
-
+    public static String LISTA_EXERCITII = "ListaExercitii";
+    public static String LISTA_EXERCITII_BUNDLE = "ListaExercitiiBundle";
 
 
     public static ArrayList<NoName> initializeazaNoName(){
@@ -23,7 +27,7 @@ public class Constants {
         NoName noName3 = new NoName("Picioare");
         NoName noName4 = new NoName("Spate");
         NoName noName5 = new NoName("Umeri");
-
+        noName1.setListExercitii(Constants.initializeazaExercitiiPieptBeginner());
         arrayList.add(noName1);
         arrayList.add(noName2);
         arrayList.add(noName3);
@@ -35,12 +39,13 @@ public class Constants {
 
     public static ArrayList<Exercise> initializeazaExercitiiPieptBeginner(){
         ArrayList<Exercise> exerciseArrayList = new ArrayList<Exercise>();
-        Exercise exercise1 = new Exercise("Barbell Bench Press",10,3,45,"http://assets.menshealth.co.uk/main/assets/bench-press.gif?mtime=1447694450");
-        Exercise exercise2 = new Exercise("45-degree incline Dumbbell Press",10,3,45,"http://assets.menshealth.co.uk/main/assets/fly-dumbbell-incline.gif?mtime=1456767160");
-        Exercise exercise3 = new Exercise("Cable Pec fly",10,3,45,"http://assets.menshealth.co.uk/main/assets/cabley.gif?mtime=1432138937");
-        Exercise exercise4 = new Exercise("Seated Chest Press Machine",10,3,20,"http://904fitness.com/wp-content/uploads/2016/09/Seated-Chest-Press-Machine.gif");
+        Exercise exercise1 = new Exercise("Barbell Bench Press",10,1,45,"http://assets.menshealth.co.uk/main/assets/bench-press.gif?mtime=1447694450");
+        //Exercise exercise2 = new Exercise("45-degree incline Dumbbell Press",10,3,45,"http://assets.menshealth.co.uk/main/assets/fly-dumbbell-incline.gif?mtime=1456767160");
+        //Exercise exercise3 = new Exercise("Cable Pec fly",10,3,45,"http://assets.menshealth.co.uk/main/assets/cabley.gif?mtime=1432138937");
+        //Exercise exercise4 = new Exercise("Seated Chest Press Machine",10,3,20,"http://904fitness.com/wp-content/uploads/2016/09/Seated-Chest-Press-Machine.gif");
 
-        exerciseArrayList.addAll(Arrays.asList(exercise1,exercise2,exercise3,exercise4));
+        //exerciseArrayList.addAll(Arrays.asList(exercise1,exercise2,exercise3,exercise4));
+        exerciseArrayList.add(exercise1);
 
         return exerciseArrayList;
     }
@@ -213,4 +218,18 @@ public class Constants {
 
         return exerciseArrayList;
     }
+
+    public static ArrayList<Exercise> deepCopyArrayListExercise(ArrayList<Exercise> list){
+        ArrayList<Exercise> arrayList = new ArrayList<Exercise>();
+        for(int i = 0 ; i <list.size();i++){
+            arrayList.set(i,new Exercise());
+            arrayList.get(i).setNume(list.get(i).getNume());
+            arrayList.get(i).setNrRepetitii(list.get(i).getNrRepetitii());
+            arrayList.get(i).setNrSerii(list.get(i).getNrSerii());
+            arrayList.get(i).setAdresaImagine(list.get(i).getAdresaImagine());
+            arrayList.get(i).setPauza(list.get(i).getPauza());
+        }
+
+        return arrayList;
+     }
 }

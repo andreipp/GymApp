@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="zzr.licenta.gymapp.Groups">
+    tools:context="zzr.licenta.gymapp.ActivityClasses.Groups">
 
 
     <LinearLayout
@@ -83,17 +83,32 @@
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:layout_marginTop="20dp"
-            android:layout_weight="1" />
+            android:layout_weight="1" >
+
+        </ListView>
+
+        <CheckBox
+            android:id="@+id/isCompleted"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight=".01"
+            android:textAlignment="center"
+            android:enabled="false"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="30dp"
+            android:textStyle="bold"
+            android:paddingTop="@dimen/fab_margin"
+            android:paddingBottom="@dimen/fab_margin"/>
 
         <Button
             android:id="@+id/btnGo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight=".01"
-            android:textStyle="bold"
             android:background="@color/colorPrimaryDark"
+            android:text="GO!"
             android:textColor="@color/albspregri"
-            android:text="GO!" />
+            android:textStyle="bold" />
 
     </LinearLayout>
 

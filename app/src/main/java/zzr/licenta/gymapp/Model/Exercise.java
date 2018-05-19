@@ -1,15 +1,33 @@
-package zzr.licenta.gymapp;
+package zzr.licenta.gymapp.Model;
+
+
+import java.io.Serializable;
+
 
 /**
  * Created by Andrei on 04/11/2018.
  */
+public class Exercise implements Serializable{
 
-public class Exercise {
-    String nume;
-    int nrRepetitii;
-    int nrSerii;
-    int pauza;
-    String adresaImagine = "";
+    private int idExercitiu;
+
+
+    private int idGrupa;
+
+
+    private String nume;
+
+
+    private int nrRepetitii;
+
+
+    private int nrSerii;
+
+
+    private int pauza;
+
+
+    private String adresaImagine = "";
 
     public String getNume() {
         return nume;
@@ -53,6 +71,22 @@ public class Exercise {
 
     public void setAdresaImagine(String adresaImagine) {
         this.adresaImagine = adresaImagine;
+    }
+
+    public int getIdExercitiu() {
+        return idExercitiu;
+    }
+
+    public void setIdExercitiu(int idExercitiu) {
+        this.idExercitiu = idExercitiu;
+    }
+
+    public int getIdGrupa() {
+        return idGrupa;
+    }
+
+    public void setIdGrupa(int idGrupa) {
+        this.idGrupa = idGrupa;
     }
 
     public Exercise() {
