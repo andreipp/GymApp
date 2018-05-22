@@ -78,11 +78,31 @@ public class NoName implements Serializable{
         this.adressImage = adresaImagine;
     }
 
-    public NoName(@NonNull int id, @NonNull String grupa, String adressImage, List<Exercise> listExercitii, boolean isCompleted) {
+    public NoName(int id, String grupa, String adressImage, List<Exercise> listExercitii, boolean isCompleted) {
         this.id = id;
         this.grupa = grupa;
         this.adressImage = adressImage;
         this.listExercitii = listExercitii;
         this.isCompleted = isCompleted;
+    }
+
+    public NoName(int id, String grupa, String adressImage, boolean isCompleted) {
+        this.id = id;
+        this.grupa = grupa;
+        this.adressImage = adressImage;
+        this.listExercitii = new ArrayList<Exercise>();
+        this.isCompleted = isCompleted;
+    }
+
+    @Override
+    public String toString() {
+        String stringListExercitii = null;
+        for(Exercise e : listExercitii){
+            stringListExercitii += " " + e.toString() + " ";
+        }
+        return grupa + " " + adressImage + " " + stringListExercitii + " " + isCompleted;
+    }
+    public String toString2() {
+        return grupa + " " + adressImage + " " + isCompleted;
     }
 }

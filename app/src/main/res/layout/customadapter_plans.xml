@@ -2,42 +2,44 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    >
 
-    <TextView
-        android:id="@+id/tvGrupa"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Grupa"
-        android:gravity="center"/>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
         >
 
-        <FrameLayout
+        android:layout_marginTop="10dp"
+
+        <ImageButton
+            android:id="@+id/imgBeginner"
             android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:backgroundTint="@color/colorPrimaryDark"/>
+
+        <TextView
+            android:id="@+id/tvBeginner"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp">
+            android:layout_gravity="center|left"
+            android:layout_marginStart="20dp"
+            android:text="null"
+            android:textSize="20dp"
+            android:textColor="@android:color/holo_green_light"
+            android:textStyle="bold" />
 
-            android:layout_marginTop="10dp"
-            <ImageButton
-                android:id="@+id/imgBeginner"
-                android:layout_width="match_parent"
-                android:layout_height="100dp" />
-
-            <TextView
-                android:id="@+id/tvBeginner"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@android:color/white"
-                android:textStyle="bold"
-                android:layout_marginStart="20dp"
-                android:layout_gravity="center|left" />
-        </FrameLayout>
-
-    </LinearLayout>
+        <CheckBox
+            android:id="@+id/checkBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|right"
+            android:layout_marginEnd="20dp"
+            android:text="null"
+            android:textStyle="italic"
+            android:textColor="@android:color/holo_green_light"
+            android:buttonTint="@android:color/holo_green_light"
+            android:enabled="false" />
+    </FrameLayout>
 
 </LinearLayout>

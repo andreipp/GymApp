@@ -105,7 +105,7 @@ public class PlayWorkout extends AppCompatActivity {
                 if(tvNameExercise.getText().equals("Workout done!") && tvSeria.getText().equals("Congrats!")){
                     finalData1.setCompleted(true);
                     Intent intent = new Intent(getBaseContext(),Groups.class);
-
+                    Constants.DATABASE.updateStatusGroupById(finalData1.getId(),true);
                     intent.putExtra(Constants.GRUPA,finalData1);
                     Log.i("ceva",finalData1.isCompleted()+"");
                     startActivity(intent);

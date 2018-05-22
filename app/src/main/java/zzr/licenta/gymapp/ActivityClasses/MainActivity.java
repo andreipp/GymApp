@@ -1,6 +1,7 @@
 package zzr.licenta.gymapp.ActivityClasses;
 
 import android.arch.persistence.room.Room;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -13,12 +14,19 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+
+import zzr.licenta.gymapp.Configs.Constants;
 import zzr.licenta.gymapp.Fragments.Plans;
+import zzr.licenta.gymapp.Model.NoName;
+import zzr.licenta.gymapp.MyLocalDataBase.DatabaseSQLite;
 import zzr.licenta.gymapp.R;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-    public static Database database;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,7 +45,31 @@ public class MainActivity extends AppCompatActivity
 
         displaySelectedFragment(R.id.nav_plans);
 
-        database = Room.databaseBuilder(getApplicationContext(),Database.class,"GymApp").build();
+        Constants.DATABASE = new DatabaseSQLite(getApplicationContext());
+        if(Constants.DATABASE.numberOfRowsGroups()<1 || Constants.DATABASE.numberOfRowsExercise()<1) {
+            for (NoName noname : Constants.initializeazaNoName()) {
+                Constants.DATABASE.insertNoName(noname);
+            }
+        }
+
+        Calendar cal = Calendar.getInstance();
+        int currentWeekOfYear = cal.get(Calendar.WEEK_OF_YEAR);
+
+        SharedPreferences sharedPreferences= this.getSharedPreferences("appInfo", 0);
+        int weekOfYear = sharedPreferences.getInt("weekOfYear", 0);
+
+        if(weekOfYear != currentWeekOfYear){
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putInt("weekOfYear", currentWeekOfYear);
+            editor.commit();
+            // Your once a week code here
+            List<NoName> listGroups = Constants.DATABASE.getGroupsList();
+            for (NoName no : listGroups) {
+                Constants.DATABASE.updateStatusGroupById(no.getId(),false);
+
+            }
+        }
+
     }
 
     @Override

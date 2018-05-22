@@ -26,6 +26,7 @@ public class Exercise implements Serializable{
 
     private int pauza;
 
+    private boolean completed;
 
     private String adresaImagine = "";
 
@@ -90,15 +91,32 @@ public class Exercise implements Serializable{
     }
 
     public Exercise() {
+
     }
 
-    public Exercise(String nume, int nrRepetitii, int nrSerii, int pauza, String adresaImagine) {
+    public Exercise(int idExercitiu,int idGrupa , String nume, String adresaImagine, int nrRepetitii, int nrSerii, int pauza, boolean completed) {
+        this.idGrupa = idGrupa;
+        this.idExercitiu = idExercitiu;
         this.nume = nume;
+        this.adresaImagine = adresaImagine;
         this.nrRepetitii = nrRepetitii;
         this.nrSerii = nrSerii;
         this.pauza = pauza;
-        this.adresaImagine = adresaImagine;
+        this.completed = completed;
     }
+
+    public Exercise( String nume, int nrRepetitii, int nrSerii, int pauza, String adresaImagine){
+        this.nume = nume;
+        this.adresaImagine = adresaImagine;
+        this.nrRepetitii = nrRepetitii;
+        this.nrSerii = nrSerii;
+        this.pauza = pauza;
+        this.completed = false;
+    }
+//
+//    public Exercise deepCopy(Exercise ex){
+//        Exercise exercise = new Exercise(ex.getIdExercitiu(),ex.getIdGrupa())
+//    }
 
     @Override
     public String toString() {

@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -32,7 +33,7 @@ public class CustomAdapterForPlans extends ArrayAdapter<NoName> {
     Context mContext;
 
 
-    public CustomAdapterForPlans( Context context, @LayoutRes int resource,ArrayList<NoName> data){
+    public CustomAdapterForPlans( Context context, @LayoutRes int resource,List<NoName> data){
         super(context,resource, data);
         this.noNameArrayList = data;
         this.mContext = context;
@@ -54,18 +55,20 @@ public class CustomAdapterForPlans extends ArrayAdapter<NoName> {
 
         if(noName!=null) {
 
-            TextView tvGrupa = (TextView) view.findViewById(R.id.tvGrupa);
             ImageButton imgBeginner = (ImageButton) view.findViewById(R.id.imgBeginner);
             TextView tvBeginner = (TextView) view.findViewById(R.id.tvBeginner);
+            CheckBox isCompleted = (CheckBox) view.findViewById(R.id.checkBox);
 
-            tvGrupa.setText(noName.getGrupa());
-
-
-            tvBeginner.setTextColor(Color.WHITE);
             tvBeginner.setText(noName.getGrupa());
 
+            isCompleted.setChecked(noName.isCompleted());
+            if(isCompleted.isChecked()){
+                isCompleted.setText("Completed");
+            }else{
+                isCompleted.setText("Incomplete");
+            }
 
-            imgBeginner.setBackgroundColor(Color.rgb(0, 0, 100));
+            //imgBeginner.setBackgroundColor(Color.rgb(0, 0, 100));
             imgBeginner.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

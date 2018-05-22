@@ -3,9 +3,13 @@ package zzr.licenta.gymapp.MyLocalDataBase;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import zzr.licenta.gymapp.Model.Exercise;
 import zzr.licenta.gymapp.Model.NoName;
@@ -27,6 +31,7 @@ public class DatabaseSQLite extends SQLiteOpenHelper{
     public static final String EXERCISE_ID = "id_exercitiu";
     public static final String EXERCISE_IDGRUPA = "id_grupa";
     public static final String EXERCISE_NUME = "nume_exercitiu";
+    public static final String EXERCISE_ADRESAIMAGINE = "adresa_imagine";
     public static final String EXERCISE_NRREPETII = "nr_repetii";
     public static final String EXERCISE_NRSERII ="nr_serii";
     public static final String EXERCISE_PAUZA ="pauza";
@@ -42,13 +47,14 @@ public class DatabaseSQLite extends SQLiteOpenHelper{
                 "CREATE TABLE " + TABLE_GROUPS + " (" + GROUP_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                         GROUP_GRUPA + " TEXT, " +
                         GROUP_ADRESAIMAGINE + " TEXT, " +
-                        GROUP_ISCOMPLETED + " TEXT );"
+                        GROUP_ISCOMPLETED + " INTEGER );"
         );
 
         sqLiteDatabase.execSQL(
-                "CREATE TABLE " + TABLE_EXERCISE + " (" +EXERCISE_ID + "INTEGER PRIMARY KEY AUTOINCREMENT, "+
+                "CREATE TABLE " + TABLE_EXERCISE + " (" +EXERCISE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "+
                         EXERCISE_IDGRUPA + " INTEGER, " +
                         EXERCISE_NUME + " TEXT," +
+                        EXERCISE_ADRESAIMAGINE+ " TEXT," +
                         EXERCISE_NRREPETII + " INTEGER, " +
                         EXERCISE_NRSERII + " INTEGER, " +
                         EXERCISE_PAUZA + " INTEGER )"
@@ -61,28 +67,149 @@ public class DatabaseSQLite extends SQLiteOpenHelper{
 
     }
 
-    public int getLastIndex(){
+    public boolean updateStatusGroupById(int id,boolean status) {
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+        try {
+            ContentValues contentValues = new ContentValues();
+
+            if (status == true) {
+                contentValues.put(GROUP_ISCOMPLETED, 1);
+            } else {
+                contentValues.put(GROUP_ISCOMPLETED, 0);
+            }
+
+            sqLiteDatabase.update(TABLE_GROUPS, contentValues, GROUP_ID + "=" + id, null);
+
+        }catch (Exception ex){
+            Log.i("Database : updateStatusGroupById", ex.toString());
+            return false;
+        }
+
+
+        return true;
+    }
+
+    public List<NoName> getGroupsList(){
+        SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
+        List<NoName> listGroups  = new ArrayList<NoName>();
+        List<Exercise> listExercise = new ArrayList<Exercise>();
+
+        String queryGroups = "SELECT * FROM " + TABLE_GROUPS +";";
+        String queryExercise = "SELECT * FROM " + TABLE_EXERCISE + ";";
+
+        Cursor cursor1 = sqLiteDatabase.rawQuery(queryExercise,null);
+        if(cursor1!=null && cursor1.moveToFirst()){
+            do{
+                Log.i("Baza : Exercise",cursor1.getInt(0) + " " + cursor1.getInt(1)+" "+ cursor1.getString(2) + " " + cursor1.getString(3) + " " +cursor1.getInt(4) + " " + cursor1.getInt(5) + " "+cursor1.getInt(6));
+
+                Exercise exercise = new Exercise(cursor1.getInt(0),cursor1.getInt(1),cursor1.getString(2),cursor1.getString(3),cursor1.getInt(4),cursor1.getInt(5),cursor1.getInt(6));
+                listExercise.add(exercise);
+            }while (cursor1.moveToNext());
+
+            cursor1.close();
+        }
+
+        Cursor cursor2 = sqLiteDatabase.rawQuery(queryGroups,null);
+        if(cursor2!=null && cursor2.moveToFirst()){
+            do{
+                Log.i("Baza : NoName",cursor2.getInt(0)+ " " +cursor2.getString(1)+ " " + cursor2.getString(2) + " " +cursor2.getInt(3));
+
+                boolean isCompleted = false;
+                if(cursor2.getInt(3)==1){
+                    isCompleted = true;
+                }
+                NoName noName = new NoName(cursor2.getInt(0),cursor2.getString(1),cursor2.getString(2),isCompleted);
+                listGroups.add(noName);
+            }while (cursor2.moveToNext());
+
+            cursor2.close();
+        }
+
+        for (NoName no: listGroups) {
+            for(Exercise ex : listExercise){
+                if(no.getId()==ex.getIdGrupa()){
+                    //Log.i("boolean",no.getId() + " " + ex.getIdGrupa());
+                    no.getListExercitii().add(ex);
+                }
+            }
+        }
+
+        for (NoName no: listGroups) {
+            for(Exercise ex : listExercise) {
+                Log.i("foreach", "NoID: " +no.getId()+" ExIDGRupa" + ex.getIdGrupa() + " // DIF" + ex.getIdExercitiu());
+            }
+        }
+        return listGroups;
+    }
+
+    public int getLastIndexGroups(){
         int lastIndex = 0;
         SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
-        //Cursor cursor = sqLiteDatabase.rawQuery(GROUP_GRUPA)
+        String query = "SELECT " + GROUP_ID + " FROM " + TABLE_GROUPS + " ORDER BY " + GROUP_ID + " DESC LIMIT 1;";
+
+        Cursor cursor = sqLiteDatabase.rawQuery(query,null);
+
+        if(cursor.moveToLast()) {
+            lastIndex = cursor.getInt(0);
+        }
+
+        cursor.close();
+
         return lastIndex;
     }
 
+    public void deleteGroupById(int idGroup){
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+        //String query = "DELETE FROM " + TABLE_GROUPS + " WHERE " + GROUP_ID + " = '" + idGroup + "';";
+        sqLiteDatabase.delete(TABLE_GROUPS,GROUP_ID+"=?",new String[]{Integer.toString(idGroup)});
+
+    }
+
+    public void deleteExerciseByIdGroup(int idGroup){
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+        //String query = "DELETE FROM " + TABLE_GROUPS + " WHERE " + GROUP_ID + " = '" + idGroup + "'";
+        sqLiteDatabase.delete(TABLE_EXERCISE,EXERCISE_IDGRUPA+"=?",new String[]{Integer.toString(idGroup)});
+
+    }
+
+    public int numberOfRowsGroups(){
+        SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
+        int numRows = (int) DatabaseUtils.queryNumEntries(sqLiteDatabase, TABLE_GROUPS);
+        return numRows;
+    }
+    public int numberOfRowsExercise(){
+        SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
+        int numRows = (int) DatabaseUtils.queryNumEntries(sqLiteDatabase, TABLE_EXERCISE);
+
+        return numRows;
+    }
+
     public boolean insertNoName(NoName noName){
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+
         try {
-            SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
             ContentValues contentValues = new ContentValues();
 
             contentValues.put(GROUP_GRUPA, noName.getGrupa());
             contentValues.put(GROUP_ADRESAIMAGINE, noName.getAdressImage());
-            contentValues.put(GROUP_ISCOMPLETED, noName.isCompleted() + "");
-
-            for (int i = 0; i < noName.getListExercitii().size(); i++) {
-                insertExercise(noName.getListExercitii().get(i));
+            if(noName.isCompleted()==true) {
+                contentValues.put(GROUP_ISCOMPLETED, 1);
             }
-
+            else{
+                contentValues.put(GROUP_ISCOMPLETED,0);
+            }
             sqLiteDatabase.insert(TABLE_GROUPS,null,contentValues);
 
+            for (int i = 0; i < noName.getListExercitii().size(); i++) {
+                if(insertExercise(noName.getListExercitii().get(i),getLastIndexGroups())==false){
+                    deleteExerciseByIdGroup(getLastIndexGroups());
+                    deleteGroupById(getLastIndexGroups());
+
+                    throw new Exception("Nu s-au inserat");
+                }
+            }
+
+            Log.i("Database : insertNoName" , noName.toString());
 
         }catch (Exception ex){
             Log.i("Database : insertNoName", ex.toString());
@@ -91,16 +218,18 @@ public class DatabaseSQLite extends SQLiteOpenHelper{
         return true;
     }
 
-    public boolean insertExercise(Exercise exercise){
-        try {
+    public boolean insertExercise(Exercise exercise,int lastIndexGroup){
             SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
-
+        try {
             ContentValues contentValue = new ContentValues();
 
+            contentValue.put(EXERCISE_IDGRUPA, lastIndexGroup);
             contentValue.put(EXERCISE_NUME, exercise.getNume());
+            contentValue.put(EXERCISE_ADRESAIMAGINE,exercise.getAdresaImagine());
             contentValue.put(EXERCISE_NRREPETII, exercise.getNrRepetitii());
             contentValue.put(EXERCISE_NRSERII, exercise.getNrSerii());
             contentValue.put(EXERCISE_PAUZA, exercise.getPauza());
+            Log.i("exercise1", lastIndexGroup+"");
             sqLiteDatabase.insert(TABLE_EXERCISE,null,contentValue);
         }
         catch (Exception ex){

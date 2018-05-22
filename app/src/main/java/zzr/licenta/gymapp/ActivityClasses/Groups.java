@@ -1,6 +1,8 @@
 package zzr.licenta.gymapp.ActivityClasses;
 
 import android.content.Intent;
+import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -71,15 +73,23 @@ public class Groups extends AppCompatActivity {
 
         final NoName finalData1 = data1;
 
+        if(isCompleted.isChecked()){
+            isCompleted.setText(isCompleted.getText() + "\nGo back and try another Workout.");
+            btnGo.setPaintFlags(btnGo.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+            btnGo.setEnabled(false);
+        }
 
         tvNrExercises.setText(ex.size()+"");
         listView.setAdapter(new CustomAdapterForExercises(this,R.layout.customadapter_exercises,ex));
         btnGo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getBaseContext(),PlayWorkout.class);
-                intent.putExtra(Constants.GRUPA, finalData1);
-                startActivity(intent);
+                if (btnGo.isEnabled()) {
+                    Intent intent = new Intent(getBaseContext(), PlayWorkout.class);
+                    intent.putExtra(Constants.GRUPA, finalData1);
+                    startActivity(intent);
+                }
+
             }
         });
     }
