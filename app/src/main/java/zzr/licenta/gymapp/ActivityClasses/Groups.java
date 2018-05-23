@@ -58,15 +58,17 @@ public class Groups extends AppCompatActivity {
            // data2 = extras.getString("completed");
         }
 
+
+
         if(data1!=null){
             ex = data1.getListExercitii();
-            if(data1.isCompleted()==true){
+            if(data1.getCompletedAsFloat()==100){
                 isCompleted.setVisibility(View.VISIBLE);
                 isCompleted.setText("Workout completed.");
                 isCompleted.setChecked(true);
             }else{
                 isCompleted.setVisibility(View.VISIBLE);
-                isCompleted.setText("Workout not completed.");
+                isCompleted.setText("Workout not completed. Its just " + data1.getCompletedAsFloat()+"%");
                 isCompleted.setChecked(false);
             }
         }

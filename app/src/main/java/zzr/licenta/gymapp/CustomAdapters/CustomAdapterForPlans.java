@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,13 +61,17 @@ public class CustomAdapterForPlans extends ArrayAdapter<NoName> {
             CheckBox isCompleted = (CheckBox) view.findViewById(R.id.checkBox);
 
             tvBeginner.setText(noName.getGrupa());
+            Log.i("tagulVietii",noName.getCompletedAsFloat()+"");
 
-            isCompleted.setChecked(noName.isCompleted());
-            if(isCompleted.isChecked()){
-                isCompleted.setText("Completed");
+            if(noName.getCompletedAsFloat()==100){
+                isCompleted.setChecked(true);
+                isCompleted.setTextColor(Color.GREEN);
             }else{
-                isCompleted.setText("Incomplete");
+                isCompleted.setChecked(false);
+                isCompleted.setTextColor(Color.RED);
             }
+
+            isCompleted.setText("Completed " + noName.getCompletedAsFloat()+"%");
 
             //imgBeginner.setBackgroundColor(Color.rgb(0, 0, 100));
             imgBeginner.setOnClickListener(new View.OnClickListener() {

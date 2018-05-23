@@ -1,5 +1,7 @@
 package zzr.licenta.gymapp.Configs;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -40,6 +42,7 @@ public class Constants {
         arrayList.add(noName3);
         arrayList.add(noName4);
         arrayList.add(noName5);
+
 
         return  arrayList;
     }
@@ -239,4 +242,39 @@ public class Constants {
 
         return arrayList;
      }
+
+//     public float getCompletedAsFloat(NoName group){
+//        float result = 0;
+//        int increment = 0;
+//         if(group.getListExercitii()!=null) {
+//             Log.i("tagulVietii4: flaot",increment+"");
+//            for (int i = 0; i < group.getListExercitii().size(); i++) {
+//                if (group.getListExercitii().get(i).isCompleted()==true) {
+//                    increment++;
+//                    Log.i("tagulVietii3: flaot",increment+"");
+//                }
+//            }
+//            result = (increment/group.getListExercitii().size());
+//            result = result*100;
+//        }
+//
+//         Log.i("tagulVietii2: float",result+"");
+//         return  result;
+//     }
+//
+//    public String getCompletedAsString(NoName group){
+//        float result = 0.2f;
+//        int increment = 0;
+//        if(group.getListExercitii()!=null) {
+//            for (int i = 0; i < group.getListExercitii().size(); i++) {
+//                if (group.getListExercitii().get(i).isCompleted()) {
+//                    increment++;
+//                }
+//            }
+//            result = (increment/group.getListExercitii().size())*100;
+//        }
+//
+//        Log.i("tagulVietii2: string",result+"");
+//        return  result+"%";
+//    }
 }

@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 
 import zzr.licenta.gymapp.Configs.Constants;
+import zzr.licenta.gymapp.Model.Exercise;
 import zzr.licenta.gymapp.Model.NoName;
 import zzr.licenta.gymapp.R;
 
@@ -103,11 +104,15 @@ public class PlayWorkout extends AppCompatActivity {
                 }
 
                 if(tvNameExercise.getText().equals("Workout done!") && tvSeria.getText().equals("Congrats!")){
-                    finalData1.setCompleted(true);
+                    //finalData1.setCompleted(100);
                     Intent intent = new Intent(getBaseContext(),Groups.class);
-                    Constants.DATABASE.updateStatusGroupById(finalData1.getId(),true);
+                    for(Exercise ex : finalData1.getListExercitii()){
+                        ex.setCompleted(true);
+                    }
+                    Constants.DATABASE.updateStatusExerciseByGroupID(finalData1.getId(),true);
+
                     intent.putExtra(Constants.GRUPA,finalData1);
-                    Log.i("ceva",finalData1.isCompleted()+"");
+                    //Log.i("ceva",finalData1.getCompleted()+"");
                     startActivity(intent);
                 }
                 else if(serieCompletaNoua==finalData1.getListExercitii().get(incremenetNou-1).getNrSerii() && incremenetNou==finalData1.getListExercitii().size()+1)

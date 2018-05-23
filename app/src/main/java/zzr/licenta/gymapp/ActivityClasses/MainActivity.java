@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity
             // Your once a week code here
             List<NoName> listGroups = Constants.DATABASE.getGroupsList();
             for (NoName no : listGroups) {
-                Constants.DATABASE.updateStatusGroupById(no.getId(),false);
+                Constants.DATABASE.updateStatusExerciseByGroupID(no.getId(),false);
 
             }
         }

@@ -42,6 +42,7 @@ public class Plans extends Fragment {
 
         arrayList = Constants.DATABASE.getGroupsList();
 
+
         ListView listView = (ListView) view.findViewById(R.id.listView);
         CustomAdapterForPlans adapter = new CustomAdapterForPlans(getActivity(),R.layout.customadapter_plans,arrayList);
         listView.setAdapter(adapter);

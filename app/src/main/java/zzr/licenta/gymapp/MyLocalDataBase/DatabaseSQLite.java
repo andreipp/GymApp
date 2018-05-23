@@ -11,6 +11,7 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
+import zzr.licenta.gymapp.Configs.Constants;
 import zzr.licenta.gymapp.Model.Exercise;
 import zzr.licenta.gymapp.Model.NoName;
 
@@ -35,6 +36,7 @@ public class DatabaseSQLite extends SQLiteOpenHelper{
     public static final String EXERCISE_NRREPETII = "nr_repetii";
     public static final String EXERCISE_NRSERII ="nr_serii";
     public static final String EXERCISE_PAUZA ="pauza";
+    public static final String EXERCISE_ISCOMPLETED = "is_completed";
 
     public DatabaseSQLite(Context context){
         super(context,"GymAppDb",null,1);
@@ -46,8 +48,7 @@ public class DatabaseSQLite extends SQLiteOpenHelper{
         sqLiteDatabase.execSQL(
                 "CREATE TABLE " + TABLE_GROUPS + " (" + GROUP_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                         GROUP_GRUPA + " TEXT, " +
-                        GROUP_ADRESAIMAGINE + " TEXT, " +
-                        GROUP_ISCOMPLETED + " INTEGER );"
+                        GROUP_ADRESAIMAGINE + " TEXT);"
         );
 
         sqLiteDatabase.execSQL(
@@ -57,7 +58,8 @@ public class DatabaseSQLite extends SQLiteOpenHelper{
                         EXERCISE_ADRESAIMAGINE+ " TEXT," +
                         EXERCISE_NRREPETII + " INTEGER, " +
                         EXERCISE_NRSERII + " INTEGER, " +
-                        EXERCISE_PAUZA + " INTEGER )"
+                        EXERCISE_PAUZA + " INTEGER, " +
+                        EXERCISE_ISCOMPLETED + " INTEGER );"
         );
 
     }
@@ -67,80 +69,62 @@ public class DatabaseSQLite extends SQLiteOpenHelper{
 
     }
 
-    public boolean updateStatusGroupById(int id,boolean status) {
+    public boolean insertNoName(NoName noName){
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+
         try {
             ContentValues contentValues = new ContentValues();
 
-            if (status == true) {
-                contentValues.put(GROUP_ISCOMPLETED, 1);
-            } else {
-                contentValues.put(GROUP_ISCOMPLETED, 0);
+            contentValues.put(GROUP_GRUPA, noName.getGrupa());
+            contentValues.put(GROUP_ADRESAIMAGINE, noName.getAdressImage());
+
+            sqLiteDatabase.insert(TABLE_GROUPS,null,contentValues);
+
+            for (int i = 0; i < noName.getListExercitii().size(); i++) {
+                if(!insertExercise(noName.getListExercitii().get(i),getLastIndexGroups())){
+                    deleteExerciseByIdGroup(getLastIndexGroups());
+                    deleteGroupById(getLastIndexGroups());
+
+                    throw new Exception("Nu s-au inserat");
+                }
             }
 
-            sqLiteDatabase.update(TABLE_GROUPS, contentValues, GROUP_ID + "=" + id, null);
+            Log.i("Database : insertNoName" , noName.toString());
 
         }catch (Exception ex){
-            Log.i("Database : updateStatusGroupById", ex.toString());
+            Log.i("Database : insertNoName", ex.toString());
             return false;
         }
-
-
         return true;
     }
 
-    public List<NoName> getGroupsList(){
-        SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
-        List<NoName> listGroups  = new ArrayList<NoName>();
-        List<Exercise> listExercise = new ArrayList<Exercise>();
+    public boolean insertExercise(Exercise exercise,int lastIndexGroup){
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+        try {
+            ContentValues contentValue = new ContentValues();
 
-        String queryGroups = "SELECT * FROM " + TABLE_GROUPS +";";
-        String queryExercise = "SELECT * FROM " + TABLE_EXERCISE + ";";
-
-        Cursor cursor1 = sqLiteDatabase.rawQuery(queryExercise,null);
-        if(cursor1!=null && cursor1.moveToFirst()){
-            do{
-                Log.i("Baza : Exercise",cursor1.getInt(0) + " " + cursor1.getInt(1)+" "+ cursor1.getString(2) + " " + cursor1.getString(3) + " " +cursor1.getInt(4) + " " + cursor1.getInt(5) + " "+cursor1.getInt(6));
-
-                Exercise exercise = new Exercise(cursor1.getInt(0),cursor1.getInt(1),cursor1.getString(2),cursor1.getString(3),cursor1.getInt(4),cursor1.getInt(5),cursor1.getInt(6));
-                listExercise.add(exercise);
-            }while (cursor1.moveToNext());
-
-            cursor1.close();
-        }
-
-        Cursor cursor2 = sqLiteDatabase.rawQuery(queryGroups,null);
-        if(cursor2!=null && cursor2.moveToFirst()){
-            do{
-                Log.i("Baza : NoName",cursor2.getInt(0)+ " " +cursor2.getString(1)+ " " + cursor2.getString(2) + " " +cursor2.getInt(3));
-
-                boolean isCompleted = false;
-                if(cursor2.getInt(3)==1){
-                    isCompleted = true;
-                }
-                NoName noName = new NoName(cursor2.getInt(0),cursor2.getString(1),cursor2.getString(2),isCompleted);
-                listGroups.add(noName);
-            }while (cursor2.moveToNext());
-
-            cursor2.close();
-        }
-
-        for (NoName no: listGroups) {
-            for(Exercise ex : listExercise){
-                if(no.getId()==ex.getIdGrupa()){
-                    //Log.i("boolean",no.getId() + " " + ex.getIdGrupa());
-                    no.getListExercitii().add(ex);
-                }
+            contentValue.put(EXERCISE_IDGRUPA, lastIndexGroup);
+            contentValue.put(EXERCISE_NUME, exercise.getNume());
+            contentValue.put(EXERCISE_ADRESAIMAGINE,exercise.getAdresaImagine());
+            contentValue.put(EXERCISE_NRREPETII, exercise.getNrRepetitii());
+            contentValue.put(EXERCISE_NRSERII, exercise.getNrSerii());
+            contentValue.put(EXERCISE_PAUZA, exercise.getPauza());
+            if(exercise.isCompleted()) {
+                contentValue.put(EXERCISE_ISCOMPLETED, 1);
+            }else{
+                contentValue.put(EXERCISE_ISCOMPLETED, 0);
             }
-        }
 
-        for (NoName no: listGroups) {
-            for(Exercise ex : listExercise) {
-                Log.i("foreach", "NoID: " +no.getId()+" ExIDGRupa" + ex.getIdGrupa() + " // DIF" + ex.getIdExercitiu());
-            }
+            Log.i("exercise1", lastIndexGroup+"");
+            sqLiteDatabase.insert(TABLE_EXERCISE,null,contentValue);
         }
-        return listGroups;
+        catch (Exception ex){
+            Log.i("Database : insertExercise", ex.toString());
+            return false;
+        }
+        return true;
     }
+
 
     public int getLastIndexGroups(){
         int lastIndex = 0;
@@ -184,58 +168,115 @@ public class DatabaseSQLite extends SQLiteOpenHelper{
         return numRows;
     }
 
-    public boolean insertNoName(NoName noName){
+//    public boolean updateStatusGroupById(int id,boolean status) { //todo vezi cu celalalt completed
+//        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+//        try {
+//            ContentValues contentValues = new ContentValues();
+//
+//            if (status == true) {
+//                contentValues.put(GROUP_ISCOMPLETED, 1);
+//            } else {
+//                contentValues.put(GROUP_ISCOMPLETED, 0);
+//            }
+//
+//            sqLiteDatabase.update(TABLE_GROUPS, contentValues, GROUP_ID + "=" + id, null);
+//
+//        }catch (Exception ex){
+//            Log.i("Database : updateStatusGroupById", ex.toString());
+//            return false;
+//        }
+//
+//
+//        return true;
+//    }
+    public boolean updateStatusExerciseByGroupID(int id, boolean status){
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
-
         try {
             ContentValues contentValues = new ContentValues();
 
-            contentValues.put(GROUP_GRUPA, noName.getGrupa());
-            contentValues.put(GROUP_ADRESAIMAGINE, noName.getAdressImage());
-            if(noName.isCompleted()==true) {
-                contentValues.put(GROUP_ISCOMPLETED, 1);
-            }
-            else{
-                contentValues.put(GROUP_ISCOMPLETED,0);
-            }
-            sqLiteDatabase.insert(TABLE_GROUPS,null,contentValues);
-
-            for (int i = 0; i < noName.getListExercitii().size(); i++) {
-                if(insertExercise(noName.getListExercitii().get(i),getLastIndexGroups())==false){
-                    deleteExerciseByIdGroup(getLastIndexGroups());
-                    deleteGroupById(getLastIndexGroups());
-
-                    throw new Exception("Nu s-au inserat");
-                }
+            if (status == true) {
+                contentValues.put(EXERCISE_ISCOMPLETED, 1);
+            } else {
+                contentValues.put(EXERCISE_ISCOMPLETED, 0);
             }
 
-            Log.i("Database : insertNoName" , noName.toString());
+            sqLiteDatabase.update(TABLE_EXERCISE, contentValues, EXERCISE_IDGRUPA + "=" + id, null);
 
         }catch (Exception ex){
-            Log.i("Database : insertNoName", ex.toString());
+            Log.i("Database : updateStatusGroupById", ex.toString());
             return false;
         }
+
+
         return true;
     }
 
-    public boolean insertExercise(Exercise exercise,int lastIndexGroup){
-            SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
-        try {
-            ContentValues contentValue = new ContentValues();
+    public List<NoName> getGroupsList(){
+        SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
+        List<NoName> listGroups  = new ArrayList<NoName>();
+        List<Exercise> listExercise = new ArrayList<Exercise>();
 
-            contentValue.put(EXERCISE_IDGRUPA, lastIndexGroup);
-            contentValue.put(EXERCISE_NUME, exercise.getNume());
-            contentValue.put(EXERCISE_ADRESAIMAGINE,exercise.getAdresaImagine());
-            contentValue.put(EXERCISE_NRREPETII, exercise.getNrRepetitii());
-            contentValue.put(EXERCISE_NRSERII, exercise.getNrSerii());
-            contentValue.put(EXERCISE_PAUZA, exercise.getPauza());
-            Log.i("exercise1", lastIndexGroup+"");
-            sqLiteDatabase.insert(TABLE_EXERCISE,null,contentValue);
+        String queryGroups = "SELECT * FROM " + TABLE_GROUPS +";";
+        String queryExercise = "SELECT * FROM " + TABLE_EXERCISE + ";";
+
+        Cursor cursor1 = sqLiteDatabase.rawQuery(queryExercise,null);
+        if(cursor1!=null && cursor1.moveToFirst()){
+            do{
+                Log.i("Baza : Exercise",cursor1.getInt(0) + " " + cursor1.getInt(1)+" "+ cursor1.getString(2) + " " + cursor1.getString(3) + " " +cursor1.getInt(4) + " " + cursor1.getInt(5) + " "+cursor1.getInt(6) +" // "+ cursor1.getInt(7));
+
+                boolean isCompleted = false;
+                if(cursor1.getInt(7)==1){
+                    isCompleted = true;
+                    Log.i("gasit", "Gasit");
+                }
+
+                Exercise exercise = new Exercise(cursor1.getInt(0),cursor1.getInt(1),cursor1.getString(2),cursor1.getString(3),cursor1.getInt(4),cursor1.getInt(5),cursor1.getInt(6),isCompleted);
+                listExercise.add(exercise);
+            }while (cursor1.moveToNext());
+
+            cursor1.close();
         }
-        catch (Exception ex){
-            Log.i("Database : insertExercise", ex.toString());
-            return false;
+
+        Cursor cursor2 = sqLiteDatabase.rawQuery(queryGroups,null);
+        if(cursor2!=null && cursor2.moveToFirst()){
+            do{
+                Log.i("Baza : NoName",cursor2.getInt(0)+ " " +cursor2.getString(1)+ " " + cursor2.getString(2));
+
+
+                NoName noName = new NoName(cursor2.getInt(0),cursor2.getString(1),cursor2.getString(2));
+                listGroups.add(noName);
+            }while (cursor2.moveToNext());
+
+            cursor2.close();
         }
-        return true;
+
+        for (NoName no: listGroups) {
+            for(Exercise ex : listExercise){
+                if(no.getId()==ex.getIdGrupa()){
+                    //Log.i("boolean",no.getId() + " " + ex.getIdGrupa());
+                    no.getListExercitii().add(ex);
+                }
+            }
+        }
+
+//        for (int i = 0; i < listGroups.get(i).getListExercitii().size();i++){
+////            for(Exercise ex : listExercise) {
+////                Log.i("foreach", "NoID: " +no.getId()+" ExIDGRupa" + ex.getIdGrupa() + " // DIF" + ex.getIdExercitiu());
+////            }
+//            if(i==1){
+//                for(int j = 0 ; j< listGroups.get(i).getListExercitii().size();i++)
+//
+//       Log.i("tagulVietii3 --: flaot",listGroups.get(i).getListExercitii().get(i).isCompleted()+" "+ listGroups.get(i).getId() + " " + listGroups.get(i).getListExercitii().get(j).getIdGrupa() +" " +listGroups.get(i).getListExercitii().get(j).getIdExercitiu());
+//            }
+//
+//        }
+
+        for (Exercise e: listExercise) {
+            if(e.isCompleted()){
+                Log.i("gasit","Gasit " + e.toString());
+            }
+        }
+        return listGroups;
     }
+
 }

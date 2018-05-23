@@ -28,6 +28,14 @@ public class Exercise implements Serializable{
 
     private boolean completed;
 
+    public boolean isCompleted() {
+        return completed;
+    }
+
+    public void setCompleted(boolean completed) {
+        this.completed = completed;
+    }
+
     private String adresaImagine = "";
 
     public String getNume() {
@@ -92,6 +100,20 @@ public class Exercise implements Serializable{
 
     public Exercise() {
 
+    }
+
+    public Exercise deepCopy(Exercise exercise){
+        Exercise exerciseNou = new Exercise();
+        exerciseNou.setIdExercitiu(exercise.getIdExercitiu());
+        exerciseNou.setIdGrupa(exercise.getIdGrupa());
+        exerciseNou.setNume(exercise.getNume());
+        exerciseNou.setAdresaImagine(exercise.getAdresaImagine());
+        exerciseNou.setNrRepetitii(exercise.getNrRepetitii());
+        exerciseNou.setNrSerii(exercise.getNrSerii());
+        exerciseNou.setPauza(exercise.getPauza());
+        exerciseNou.setCompleted(exercise.isCompleted());
+
+        return exerciseNou;
     }
 
     public Exercise(int idExercitiu,int idGrupa , String nume, String adresaImagine, int nrRepetitii, int nrSerii, int pauza, boolean completed) {

@@ -1,16 +1,13 @@
 package zzr.licenta.gymapp.Model;
 
-import android.arch.persistence.room.ColumnInfo;
-import android.arch.persistence.room.Embedded;
-import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.Ignore;
-import android.arch.persistence.room.PrimaryKey;
-import android.arch.persistence.room.Relation;
-import android.support.annotation.NonNull;
+
+import android.util.Log;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
+import zzr.licenta.gymapp.Configs.Constants;
 
 /**
  * Created by Andrei on 03/21/2018.
@@ -26,8 +23,6 @@ public class NoName implements Serializable{
 
     private List<Exercise> listExercitii;
 
-    private boolean isCompleted = false;
-
 
 
     public int getId() {
@@ -38,13 +33,10 @@ public class NoName implements Serializable{
         this.id = id;
     }
 
-    public boolean isCompleted() {
-        return isCompleted;
+    public void setListExercitii(List<Exercise> listExercitii) {
+        this.listExercitii = listExercitii;
     }
 
-    public void setCompleted(boolean completed) {
-        isCompleted = completed;
-    }
 
     public List<Exercise> getListExercitii() {
         return listExercitii;
@@ -78,20 +70,49 @@ public class NoName implements Serializable{
         this.adressImage = adresaImagine;
     }
 
-    public NoName(int id, String grupa, String adressImage, List<Exercise> listExercitii, boolean isCompleted) {
+    public NoName(int id, String grupa, String adressImage, List<Exercise> listExercitii) {
         this.id = id;
         this.grupa = grupa;
         this.adressImage = adressImage;
         this.listExercitii = listExercitii;
-        this.isCompleted = isCompleted;
     }
 
-    public NoName(int id, String grupa, String adressImage, boolean isCompleted) {
+    public NoName(int id, String grupa, String adressImage) {
         this.id = id;
         this.grupa = grupa;
         this.adressImage = adressImage;
         this.listExercitii = new ArrayList<Exercise>();
-        this.isCompleted = isCompleted;
+    }
+
+    public NoName deepCopy(NoName noName){
+        NoName noNameNou = new NoName();
+        noNameNou.setId(noName.getId());
+        noNameNou.setGrupa(noName.getGrupa());
+        for (Exercise e: noName.getListExercitii()) {
+            noNameNou.getListExercitii().add(e);
+
+       }
+       return noNameNou;
+    }
+
+    public float getCompletedAsFloat(){
+        float result = 0;
+        int increment = 0;
+        if(this.listExercitii!=null) {
+            Log.i("tagulVietii4: flaot",increment+"");
+            for (int i = 0; i < this.listExercitii.size(); i++) {
+                Log.i("tagulVietii5: flaot",this.listExercitii.get(i).isCompleted()+" "+ this.id + " " + this.listExercitii.get(i).getIdGrupa() +" " +this.listExercitii.get(i).getIdExercitiu());
+                if (this.listExercitii.get(i).isCompleted()) {
+                    increment++;
+                    Log.i("tagulVietii3: flaot",increment+"");
+                }
+            }
+            result = (increment/this.listExercitii.size());
+            result = result*100;
+        }
+
+        Log.i("tagulVietii2: float",result+"");
+        return  result;
     }
 
     @Override
@@ -100,9 +121,9 @@ public class NoName implements Serializable{
         for(Exercise e : listExercitii){
             stringListExercitii += " " + e.toString() + " ";
         }
-        return grupa + " " + adressImage + " " + stringListExercitii + " " + isCompleted;
+        return grupa + " " + adressImage + " " + stringListExercitii + " " ;
     }
     public String toString2() {
-        return grupa + " " + adressImage + " " + isCompleted;
+        return grupa + " " + adressImage + " " ;
     }
 }
