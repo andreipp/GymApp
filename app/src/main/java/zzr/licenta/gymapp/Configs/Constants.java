@@ -17,7 +17,7 @@ public class Constants {
 
     public static String GRUPA = "Grupa";
     public static String INTENSITATE = "Intensitate";
-    public static String GRUPA_INTENSITATE = GRUPA+"_"+INTENSITATE;
+    public static String GRUPA_ISTORIC = "Grupa Istoric";
     public static String LISTA_EXERCITII = "ListaExercitii";
     public static String LISTA_EXERCITII_BUNDLE = "ListaExercitiiBundle";
 

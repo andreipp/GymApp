@@ -39,6 +39,7 @@ public class CustomAdapterForExercises extends ArrayAdapter<Exercise>{
     }
 
 
+
     @NonNull
     @Override
     public View getView(int position, @Nullable final View convertView, @NonNull ViewGroup parent) {

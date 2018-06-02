@@ -54,18 +54,29 @@
                     android:gravity="center"
                     android:orientation="vertical">
 
+                    <TextView
+                        android:id="@+id/textView8"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="%"
+                        android:textSize="18dp"
+                        android:textStyle="bold|italic" />
+
                     <ProgressBar
                         android:id="@+id/progressBar"
-                        style="?android:attr/progressBarStyle"
+                        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:theme="@style/CustomProgressBar"/>
+                        android:max="100"
+                        android:min="0"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="15dp"/>
 
                     <TextView
                         android:id="@+id/textView5"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Level"
+                        android:text="Progress"
                         android:textSize="18dp"
                         android:textStyle="bold|italic" />
                 </LinearLayout>
@@ -100,8 +111,7 @@
             android:paddingRight="16dp"
             android:textSize="20dp"
             android:textAlignment="textStart"
-            android:textColor="@color/colorPrimaryDark"
-            android:buttonTint="@color/colorPrimaryDark"
+
             android:textStyle="bold" />
 
         <Button

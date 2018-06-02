@@ -1,6 +1,7 @@
 package zzr.licenta.gymapp.Model;
 
 
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import java.io.Serializable;
@@ -37,7 +38,6 @@ public class NoName implements Serializable{
         this.listExercitii = listExercitii;
     }
 
-
     public List<Exercise> getListExercitii() {
         return listExercitii;
     }
@@ -48,6 +48,7 @@ public class NoName implements Serializable{
 
     public NoName(){
         this.grupa = "Piept";
+        this.listExercitii = new ArrayList<Exercise>();
     }
 
     public NoName(String grupa){
@@ -84,35 +85,65 @@ public class NoName implements Serializable{
         this.listExercitii = new ArrayList<Exercise>();
     }
 
-    public NoName deepCopy(NoName noName){
-        NoName noNameNou = new NoName();
-        noNameNou.setId(noName.getId());
-        noNameNou.setGrupa(noName.getGrupa());
+    public void deepCopy(NoName noName){
+
+        this.setId(noName.getId());
+        this.setGrupa(noName.getGrupa());
         for (Exercise e: noName.getListExercitii()) {
-            noNameNou.getListExercitii().add(e);
+            this.getListExercitii().add(e);
 
        }
-       return noNameNou;
+    }
+
+    public NoName combineTwoListOfExercise(NoName noName){
+        for(Exercise e1 : this.getListExercitii()){
+            for(Exercise e2 : noName.getListExercitii()){
+                if(e1.getIdExercitiu() == e2.getIdExercitiu()){
+                    e1.setCompleted(e2.isCompleted());
+                }
+            }
+        }
+        return this;
+    }
+
+    public void afiseaza(float a, float b){
+        //if(a!=0){
+            Log.i("tagulVietii1: flaot",a + " " + b);
+        //}
     }
 
     public float getCompletedAsFloat(){
-        float result = 0;
-        int increment = 0;
+        float result = 0.0000f;
+        float increment = 0.0000f;
+        Log.i("ciudat","null");
         if(this.listExercitii!=null) {
-            Log.i("tagulVietii4: flaot",increment+"");
+            Log.i("ciudat","glumeam");
+           // afiseaza(result,increment);
             for (int i = 0; i < this.listExercitii.size(); i++) {
-                Log.i("tagulVietii5: flaot",this.listExercitii.get(i).isCompleted()+" "+ this.id + " " + this.listExercitii.get(i).getIdGrupa() +" " +this.listExercitii.get(i).getIdExercitiu());
+                afiseaza(result,increment);
                 if (this.listExercitii.get(i).isCompleted()) {
                     increment++;
-                    Log.i("tagulVietii3: flaot",increment+"");
+                    Log.i("tagulVietii3: flaot",result + " " + increment);
                 }
             }
+            Log.i("tagulVietii4: flaot",result + " " + increment);
             result = (increment/this.listExercitii.size());
             result = result*100;
+            Log.i("tagulVietii5: flaot",result + " " + increment);
         }
 
-        Log.i("tagulVietii2: float",result+"");
         return  result;
+    }
+
+    public NoName getOnlyInCompletedExercise(NoName noName){
+        this.id = noName.getId();
+        this.grupa = noName.getGrupa();
+        this.adressImage = noName.getAdressImage();
+        for(Exercise exercise : noName.getListExercitii()){
+            if(!exercise.isCompleted())
+                this.getListExercitii().add(exercise);
+        }
+        return this;
     }
 
     @Override

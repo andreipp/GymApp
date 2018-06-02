@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -19,18 +20,20 @@ import java.util.List;
 
 import zzr.licenta.gymapp.Configs.Constants;
 import zzr.licenta.gymapp.CustomAdapters.CustomAdapterForExercises;
+import zzr.licenta.gymapp.Fragments.Reports;
 import zzr.licenta.gymapp.Model.Exercise;
 import zzr.licenta.gymapp.Model.NoName;
 import zzr.licenta.gymapp.R;
 
 public class Groups extends AppCompatActivity {
 
-    RatingBar rbEnergy;
+    ProgressBar progressBar;
     TextView tvNrExercises;
     CheckBox isCompleted;
     ListView listView;
     Button btnGo;
-
+    TextView laSuta;
+    int istoric;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,12 +42,12 @@ public class Groups extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        rbEnergy = (RatingBar) findViewById(R.id.ratingBar);
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
         tvNrExercises = (TextView) findViewById(R.id.textView4);
         listView = (ListView) findViewById(R.id.listView);
         isCompleted = (CheckBox) findViewById(R.id.isCompleted);
         btnGo = (Button) findViewById(R.id.btnGo);
-
+        laSuta = (TextView) findViewById(R.id.textView8);
         isCompleted.setVisibility(View.INVISIBLE);
 
         NoName data1 = null;
@@ -55,7 +58,7 @@ public class Groups extends AppCompatActivity {
 
         if(extras!=null){
             data1 =(NoName) extras.get(Constants.GRUPA);
-           // data2 = extras.getString("completed");
+            istoric = extras.getInt(Constants.GRUPA_ISTORIC);
         }
 
 
@@ -71,6 +74,10 @@ public class Groups extends AppCompatActivity {
                 isCompleted.setText("Workout not completed. Its just " + data1.getCompletedAsFloat()+"%");
                 isCompleted.setChecked(false);
             }
+
+            progressBar.setMax(100);
+            progressBar.setProgress((int)data1.getCompletedAsFloat());
+            laSuta.setText((int)data1.getCompletedAsFloat() + "%");
         }
 
         final NoName finalData1 = data1;
@@ -79,6 +86,11 @@ public class Groups extends AppCompatActivity {
             isCompleted.setText(isCompleted.getText() + "\nGo back and try another Workout.");
             btnGo.setPaintFlags(btnGo.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
             btnGo.setEnabled(false);
+        }
+
+        if(istoric==1){
+            btnGo.setVisibility(View.GONE);
+            isCompleted.setVisibility(View.GONE);
         }
 
         tvNrExercises.setText(ex.size()+"");
@@ -96,14 +108,22 @@ public class Groups extends AppCompatActivity {
         });
     }
 
+    public void doTheRightThing(int is){
+        if (is == 1){
+            finish();
+        }else{
+            startActivity(new Intent(Groups.this,MainActivity.class));
+        }
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
         switch (item.getItemId()) {
-            case android.R.id.home:
-                Intent intent = new Intent(this,MainActivity.class);
-                startActivity(intent);
+            case android.R.id.home: {
+                doTheRightThing(istoric);
                 return true;
+            }
         }
         return super.onOptionsItemSelected(item);
     }

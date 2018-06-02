@@ -1,12 +1,15 @@
 package zzr.licenta.gymapp.Fragments;
 
 
+import android.app.AlertDialog;
+import android.app.Fragment;
+import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -44,8 +47,10 @@ public class Plans extends Fragment {
 
 
         ListView listView = (ListView) view.findViewById(R.id.listView);
-        CustomAdapterForPlans adapter = new CustomAdapterForPlans(getActivity(),R.layout.customadapter_plans,arrayList);
+        final CustomAdapterForPlans adapter = new CustomAdapterForPlans(getActivity(),R.layout.customadapter_plans,arrayList,0);
         listView.setAdapter(adapter);
+
+
 
         return view;
     }

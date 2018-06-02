@@ -6,6 +6,27 @@
             android:id="@+id/nav_plans"
             android:icon="@drawable/icon_menu_plans"
             android:title="Training Plans" />
+        <item
+            android:id="@+id/nav_createPlans"
+            android:icon="@drawable/icon_menu_plans"
+            android:title="Create plans" />
+            />
+        <item
+            android:id="@+id/nav_createExercises"
+            android:icon="@drawable/icon_menu_plans"
+            android:title="Create exercises" />
+        <item
+            android:id="@+id/nav_reports"
+            android:icon="@drawable/ic_menu_reports"
+            android:title="Reports"/>
+        <item
+            android:id="@+id/nav_reminder"
+            android:icon="@drawable/ic_menu_reminder"
+            android:title="Reminder"/>
+        <item
+            android:id="@+id/nav_reset"
+            android:icon="@drawable/ic_menu_reset"
+            android:title="Reset progress"/>
     </group>
 
 

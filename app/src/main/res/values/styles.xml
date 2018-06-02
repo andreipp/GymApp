@@ -26,8 +26,5 @@
         <item name="android:maxHeight">36dp</item>
     </style>
 
-    <style name="CustomProgressBar" parent="@android:style/Widget.ProgressBar">
-        <item name="green">#10f200</item>
-    </style>
 
 </resources>
