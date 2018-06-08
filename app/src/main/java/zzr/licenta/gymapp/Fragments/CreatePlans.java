@@ -92,7 +92,6 @@ public class CreatePlans extends Fragment {
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
 
                 CheckBox checkBox = (CheckBox) view.findViewById(R.id.selectat);
-                checkBox.setEnabled(false);
                 if(checkBox.getVisibility()==View.VISIBLE){
                     checkBox.setVisibility(View.GONE);
                     checkBox.setChecked(false);

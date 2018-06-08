@@ -115,21 +115,15 @@ public class NoName implements Serializable{
     public float getCompletedAsFloat(){
         float result = 0.0000f;
         float increment = 0.0000f;
-        Log.i("ciudat","null");
         if(this.listExercitii!=null) {
-            Log.i("ciudat","glumeam");
-           // afiseaza(result,increment);
             for (int i = 0; i < this.listExercitii.size(); i++) {
                 afiseaza(result,increment);
                 if (this.listExercitii.get(i).isCompleted()) {
                     increment++;
-                    Log.i("tagulVietii3: flaot",result + " " + increment);
                 }
             }
-            Log.i("tagulVietii4: flaot",result + " " + increment);
             result = (increment/this.listExercitii.size());
             result = result*100;
-            Log.i("tagulVietii5: flaot",result + " " + increment);
         }
 
         return  result;
@@ -148,13 +142,10 @@ public class NoName implements Serializable{
 
     @Override
     public String toString() {
-        String stringListExercitii = null;
-        for(Exercise e : listExercitii){
-            stringListExercitii += " " + e.toString() + " ";
-        }
-        return grupa + " " + adressImage + " " + stringListExercitii + " " ;
-    }
-    public String toString2() {
-        return grupa + " " + adressImage + " " ;
+        return "NoName{" +
+                "id=" + id +
+                ", grupa='" + grupa + '\'' +
+                ", adressImage='" + adressImage + '\'' +
+                '}';
     }
 }

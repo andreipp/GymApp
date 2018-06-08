@@ -1,7 +1,7 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
     tools:context="zzr.licenta.gymapp.Fragments.CreatePlans">
 
@@ -9,35 +9,77 @@
 
     <EditText
         android:id="@+id/etPlanName"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
         android:layout_marginTop="30dp"
         android:ems="10"
         android:gravity="center"
         android:hint="Plan name"
-        android:inputType="textPersonName"
+        android:inputType="textPersonName" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"/>
-
-    <ListView
-        android:id="@+id/listView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/btnAdauga"
-        android:layout_below="@+id/etPlanName"
         android:layout_marginRight="30dp"
-        android:layout_marginLeft="30dp"/>
+        android:layout_marginTop="30dp"
+        android:orientation="horizontal">
 
+        <EditText
+            android:id="@+id/etURL2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
 
-    <Button
-        android:id="@+id/btnAdauga"
+            android:layout_weight="1"
+            android:ems="10"
+            android:gravity="center"
+            android:hint="URL or PATH to GIF"
+            android:inputType="textPersonName" />
+
+        <Button
+            android:id="@+id/btnBrowse2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Browse" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/ivPreviewImage2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
+        android:src="@drawable/ic_menu_play" />
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimaryDark"
-        android:autoSizeTextType="uniform"
-        android:layout_alignParentBottom="true"
-        android:textColor="@android:color/white"
-        android:text="Add Plan"/>
-</RelativeLayout>
+        android:orientation="vertical">
+
+        <ListView
+            android:id="@+id/listView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="30dp"
+            android:layout_weight="1"
+            android:layout_marginRight="30dp" />
+
+        <Button
+            android:id="@+id/btnAdauga"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="30dp"
+            android:layout_weight="0.1"
+            android:autoSizeTextType="uniform"
+            android:background="@color/colorPrimaryDark"
+            android:text="Add Plan"
+            android:textColor="@android:color/white" />
+
+    </LinearLayout>
+
+
+</LinearLayout>

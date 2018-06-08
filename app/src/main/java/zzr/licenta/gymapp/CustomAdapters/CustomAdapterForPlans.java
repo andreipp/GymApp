@@ -19,6 +19,9 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +30,8 @@ import zzr.licenta.gymapp.ActivityClasses.Groups;
 import zzr.licenta.gymapp.Model.Exercise;
 import zzr.licenta.gymapp.Model.NoName;
 import zzr.licenta.gymapp.R;
+
+import static android.content.ContentValues.TAG;
 
 /**
  * Created by Andrei on 03/21/2018.
@@ -78,10 +83,16 @@ public class CustomAdapterForPlans extends ArrayAdapter<NoName> {
             }
 
             isCompleted.setText("Completed " + noName.getCompletedAsFloat() + "%");
-
-            if (istoric == 1) {
+            if(noName.getAdressImage()==null) {
+                if (istoric == 1) {
+                    imgBeginner.setBackgroundColor(Color.TRANSPARENT);
+                    isCompleted.setTextColor(Color.GREEN);
+                }
+            }else{
+                RequestOptions requestOptions = new RequestOptions().optionalCenterCrop();
+                Glide.with(mContext).load(noName.getAdressImage()).apply(requestOptions).into(imgBeginner);
                 imgBeginner.setBackgroundColor(Color.TRANSPARENT);
-                isCompleted.setTextColor(Color.GREEN);
+                Log.i("iii", noName.toString()+"");
             }
 
             //imgBeginner.setBackgroundColor(Color.rgb(0, 0, 100));
@@ -98,28 +109,23 @@ public class CustomAdapterForPlans extends ArrayAdapter<NoName> {
                 imgBeginner.setOnLongClickListener(new View.OnLongClickListener() {
                     @Override
                     public boolean onLongClick(final View view) {
-                        Log.i("fmm", "fmm");
+
                         AlertDialog.Builder alertDialog = new AlertDialog.Builder(mContext);
                         alertDialog.setIcon(R.drawable.ic_delete_sweep_black_24dp);
                         alertDialog.setTitle("Delete?");
                         alertDialog.setMessage("Are you sure you want to delete this plan?");
-                        Log.i("fmm", "fmm");
+
                         alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                Log.i("fmm", "fmm");
+
                                 Constants.DATABASE.deleteExerciseByIdGroup(noName.getId());
                                 Constants.DATABASE.deleteGroupById(noName.getId());
-
-                            }
-                        });
-                        alertDialog.setNegativeButton("No", null);
-                        alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                            @Override
-                            public void onDismiss(DialogInterface dialogInterface) {
                                 remove(noName);
                             }
                         });
+                        alertDialog.setNegativeButton("No", null);
+
                         alertDialog.show();
                         return false;
                     }

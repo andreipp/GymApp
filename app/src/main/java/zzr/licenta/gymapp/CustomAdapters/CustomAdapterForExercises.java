@@ -1,5 +1,6 @@
 package zzr.licenta.gymapp.CustomAdapters;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.support.annotation.LayoutRes;
@@ -40,6 +41,7 @@ public class CustomAdapterForExercises extends ArrayAdapter<Exercise>{
 
 
 
+    @SuppressLint("ClickableViewAccessibility")
     @NonNull
     @Override
     public View getView(int position, @Nullable final View convertView, @NonNull ViewGroup parent) {
@@ -80,7 +82,7 @@ public class CustomAdapterForExercises extends ArrayAdapter<Exercise>{
                     return false;
                 }
             });
-
+            //todo
             ivMiniExercise.setOnTouchListener(new View.OnTouchListener() {
                 AlertDialog.Builder builder = new AlertDialog.Builder(finalView.getContext());
                 AlertDialog alert = builder.create();
@@ -88,24 +90,20 @@ public class CustomAdapterForExercises extends ArrayAdapter<Exercise>{
                 @Override
                 public boolean onTouch(View view, MotionEvent motionEvent) {
 
-                    int actionMaskerd = motionEvent.getActionMasked();
-                    switch (actionMaskerd){
+                    //int actionMaskerd = motionEvent.getActionMasked();
+                    switch (motionEvent.getAction()){
                         case MotionEvent.ACTION_DOWN:
                             if(!alert.isShowing()) {
-                                Log.e("Apas","3");
                                 LayoutInflater layoutInflater = LayoutInflater.from(finalView.getContext());
                                 View view2 = layoutInflater.inflate(R.layout.gif_view,null);
                                 alert.setView(view2);
                                 ImageView ivMaxiExercise = (ImageView) view2.findViewById(R.id.ivMaxiExercise);
                                 Glide.with(view2.getContext()).load(exercise.getAdresaImagine()).into(ivMaxiExercise);
                                 alert.show();
-                                Log.e("Apas","4");
                             }
                             break;
                         case MotionEvent.ACTION_UP:
-                            Log.e("Nu Apas","1");
                             alert.dismiss();
-                            Log.e("Nu Apas","2");
                             break;
                     }
                     return false;
